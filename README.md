@@ -5,6 +5,22 @@
 > [!IMPORTANT]
 > For LavaSrc v3 (Lavaplayer v1 & Lavalink v3) look [here](https://github.com/topi314/LavaSrc/tree/v3-legacy)
 
+> [!IMPORTANT]
+> This branch supports custom audio sources. If I didn't share this with you it is unlikely to be any use to you and you want to use the main repo
+
+A collection of additional [Lavaplayer v2](https://github.com/sedmelluq/lavaplayer), [LavaSearch](https://github.com/topi314/LavaSearch) & [LavaLyrics](https://github.com/topi314/LavaLyrics) Audio Source Managers and [Lavalink v4](https://github.com/lavalink-devs/Lavalink) Plugin.
+* [Spotify](https://www.spotify.com) playlists/albums/songs/artists(top tracks)/search results/[LavaSearch](https://github.com/topi314/LavaSearch)/[LavaLyrics](https://github.com/topi314/LavaLyrics)
+* [Apple Music](https://www.apple.com/apple-music/) playlists/albums/songs/artists/search results/[LavaSearch](https://github.com/topi314/LavaSearch) (Big thx to [ryan5453](https://github.com/ryan5453) for helping me)
+* [Deezer](https://www.deezer.com) playlists/albums/songs/artists/search results/[LavaSearch](https://github.com/topi314/LavaSearch)/[LavaLyrics](https://github.com/topi314/LavaLyrics) (Big thx to [ryan5453](https://github.com/ryan5453) and [melike2d](https://github.com/melike2d) for helping me)
+* [Yandex Music](https://music.yandex.ru) playlists/albums/songs/artists/podcasts/search results/[LavaLyrics](https://github.com/topi314/LavaLyrics)/[LavaSearch](https://github.com/topi314/LavaSearch) (Thx to [AgutinVBoy](https://github.com/agutinvboy) for implementing it)
+* [Flowery TTS](https://flowery.pw/docs) (Thx to [bachtran02](https://github.com/bachtran02) for implementing it)
+* [YouTube](https://youtube.com) & [YouTubeMusic](https://music.youtube.com/) [LavaSearch](https://github.com/topi314/LavaSearch)/[LavaLyrics](https://github.com/topi314/LavaLyrics)  (Thx to [DRSchlaubi](https://github.com/DRSchlaubi) for helping me)
+* [Vk Music](https://music.vk.com/) playlists/albums/songs/artists(top tracks)/search results/[LavaLyrics](https://github.com/topi314/LavaLyrics)/[LavaSearch](https://github.com/topi314/LavaSearch) (Thx to [Krispeckt](https://github.com/Krispeckt) for implementing it)
+* [Tidal](https://tidal.com) playlists/albums/songs/search results (Thx to [Nansess](https://github.com/Nansess) and [InfNibor](https://github.com/infnibor) for implementing it)
+
+> [!IMPORTANT]
+> Tracks from Spotify & Apple Music & Tidal don't actually play from their sources, but are instead resolved via the configured providers
+
 ## Summary
 
 * [Sources](#sources)
@@ -15,6 +31,7 @@
     * [Update Settings at Runtime](#update-settings-at-runtime)
 * [Lavaplayer Usage](#lavaplayer-usage)
 * [Supported URLs and Queries](#supported-urls-and-queries)
+* [Custom provider support](#custom-provider)
 
 # Sources
 
@@ -93,6 +110,7 @@ To get your Tidal token go [here](#tidal)
 plugins:
   lavasrc:
     providers: # Custom providers for track loading. This is the default
+      - "custisrc":%ISRC%" # For custom source
       # - "dzisrc:%ISRC%" # Deezer ISRC provider
       # - "dzsearch:%QUERY%" # Deezer search provider
       - "ytsearch:\"%ISRC%\"" # Will be ignored if track does not have an ISRC. See https://en.wikipedia.org/wiki/International_Standard_Recording_Code
@@ -107,6 +125,7 @@ plugins:
       youtube: false # Enable YouTube search source (https://github.com/topi314/LavaSearch)
       vkmusic: false # Enable Vk Music source
       tidal: false # Enable Tidal source
+      customsrc: true # For the custom src
     lyrics-sources:
       spotify: false # Enable Spotify lyrics source
       deezer: false # Enable Deezer lyrics source
@@ -160,6 +179,9 @@ plugins:
       countryCode: "US" # the country code for accessing region-specific content on Tidal (ISO 3166-1 alpha-2).
       searchLimit: 6 # How many search results should be returned
       token: "your tidal token" # the token used for accessing the tidal api. See https://github.com/topi314/LavaSrc#tidal
+    customsrc:
+      key: "YOUR KEY HEAR"
+      baseUrl: "https://yourcustomthing.com" # The base url of your custom provider. /search path if it needs that for isrc/text searches. 
 ```
 
 ### Plugin Info
@@ -797,3 +819,52 @@ You can read about all the available options [here](https://flowery.pw/docs), a 
 * https://tidal.com/browse/artist/12345678
 
 ---
+
+## Custom Provider
+This plugin fork add support for a specific custom provider, so atm its not super configurable for api format etc. What is is the url and key.  
+
+I have tested it a bit and it's rolling out on a smaller scale bot atm. You should also be able to send queries to lavalink as "custsearch:never gonna give you up", etc just as you do with YT. But I have yet to test that thourougly. Use at your own caution for now. The mirroring has been tested mainly with isrc as well. Search worked in my small scale testing, but not yet deployed at scale. 
+
+### Getting the plugin
+I host the plugin on my personal maven repo. Anyone can download from it, if you need high availability I would reccomend not relying on this repo. It is run on a pc in my closet, so while its up a lot of the time I can't garuntee it will be up 100% of the time.
+```yml
+lavalink:
+  plugins:
+    - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:MOST_RECENT_COMMIT_HASH"
+      repository: "https://maven.kikkia.dev/snapshots" # this is optional for lavalink v4.0.0-beta.5 or greater
+      snapshot: true # set to true if you want to use snapshot builds (see below)
+```
+
+### Setup
+There are some extra things you will need to setup in your ll yml. 
+
+#### Example Sources config
+```yml
+ sources:
+      spotify: true # Enable Spotify source
+      applemusic: true # Enable Apple Music source
+      deezer: true # Enable Deezer source
+      yandexmusic: false # Enable Yandex Music source
+      flowerytts: false # Enable Flowery TTS source
+      youtube: false
+      vkmusic: false
+      customsrc: true # custom source
+```
+
+#### Example Providers config
+```yml
+  lavasrc:
+    providers: # Custom providers for track loading. This is the default
+      - "custisrc:%ISRC%"
+      - "custsearch:%QUERY%" # While this seemed to work at first test, I haven't tested at scale yet. 
+
+```
+
+#### Provider config
+The searches and isrc lookups are appended to the end of the baseUrl as query params. This config lives in the same place as other providers. 
+```yml
+customsrc:
+      key: "YOUR_KEY"
+      baseUrl: "https://my-site.com/search"
+      userAgent: "Your useragent"
+```
