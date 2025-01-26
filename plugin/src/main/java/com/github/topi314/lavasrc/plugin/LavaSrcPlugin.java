@@ -126,7 +126,8 @@ public class LavaSrcPlugin implements AudioPlayerManagerConfiguration, SearchMan
 			this.customMusic = new CustomSrcAudioManager(
 				customSrcConfig.getKey(),
 				customSrcConfig.getBaseUrl(),
-				customSrcConfig.getName()
+				customSrcConfig.getName(),
+				customSrcConfig.getUserAgent()
 			);
 		}
 	}
