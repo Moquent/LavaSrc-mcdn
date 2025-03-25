@@ -14,6 +14,8 @@ plugins:
       flowerytts: false # Enable Flowery TTs source
       youtube: false # Enable YouTube search source (https://github.com/topi314/LavaSearch)
       vkmusic: false # Enable Vk Music source
+      customSrc: false # Enable Custom Source
+      mcdn: false # Enable MCDN Source
     lyrics-sources:
       spotify: false # Enable Spotify lyrics source
       deezer: false # Enable Deezer lyrics source
@@ -55,6 +57,15 @@ plugins:
       playlistLoadLimit: 1 # The number of pages at 50 tracks each
       artistLoadLimit: 1 # The number of pages at 10 tracks each
       recommendationsLoadLimit: 10 # Number of tracks
+    customsrc:
+      key: "your api key" # The API key for the custom source
+      baseUrl: "https://api.example.com" # The base URL for the custom source API
+      name: "custom" # Optional: The name of the custom source
+      userAgent: "Lavasrc" # Optional: The user agent to use for requests
+    mcdn:
+      apiKey: "your api key" # The API key for the MCDN API
+      baseUrl: "https://cdn-api.example.com" # The base URL for the MCDN API
+      userAgent: "Lavasrc" # Optional: The user agent to use for requests
 
 server: # REST and WS server
   port: 2333

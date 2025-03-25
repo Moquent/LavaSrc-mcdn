@@ -9,6 +9,7 @@ import com.github.topi314.lavasrc.customsrc.CustomSrcAudioManager;
 import com.github.topi314.lavasrc.deezer.DeezerAudioSourceManager;
 import com.github.topi314.lavasrc.deezer.DeezerAudioTrack;
 import com.github.topi314.lavasrc.flowerytts.FloweryTTSSourceManager;
+import com.github.topi314.lavasrc.mcdn.MCDNAudioManager;
 import com.github.topi314.lavasrc.mirror.DefaultMirroringAudioTrackResolver;
 import com.github.topi314.lavasrc.plugin.config.*;
 import com.github.topi314.lavasrc.protocol.Config;
@@ -42,8 +43,9 @@ public class LavaSrcPlugin implements AudioPlayerManagerConfiguration, SearchMan
 	private YoutubeSearchManager youtube;
 	private VkMusicSourceManager vkMusic;
 	private CustomSrcAudioManager customMusic;
+	private MCDNAudioManager mcdnMusic;
 
-	public LavaSrcPlugin(LavaSrcConfig pluginConfig, SourcesConfig sourcesConfig, LyricsSourcesConfig lyricsSourcesConfig, SpotifyConfig spotifyConfig, AppleMusicConfig appleMusicConfig, DeezerConfig deezerConfig, YandexMusicConfig yandexMusicConfig, FloweryTTSConfig floweryTTSConfig, YouTubeConfig youTubeConfig, VkMusicConfig vkMusicConfig, CustomSrcConfig customSrcConfig) {
+	public LavaSrcPlugin(LavaSrcConfig pluginConfig, SourcesConfig sourcesConfig, LyricsSourcesConfig lyricsSourcesConfig, SpotifyConfig spotifyConfig, AppleMusicConfig appleMusicConfig, DeezerConfig deezerConfig, YandexMusicConfig yandexMusicConfig, FloweryTTSConfig floweryTTSConfig, YouTubeConfig youTubeConfig, VkMusicConfig vkMusicConfig, CustomSrcConfig customSrcConfig, MCDNConfig mcdnConfig) {
 		log.info("Loading LavaSrc plugin...");
 		this.sourcesConfig = sourcesConfig;
 		this.lyricsSourcesConfig = lyricsSourcesConfig;
@@ -130,6 +132,14 @@ public class LavaSrcPlugin implements AudioPlayerManagerConfiguration, SearchMan
 				customSrcConfig.getUserAgent()
 			);
 		}
+		
+		if (sourcesConfig.isMcdn()) {
+			this.mcdnMusic = new MCDNAudioManager(
+				mcdnConfig.getApiKey(),
+				mcdnConfig.getBaseUrl(),
+				mcdnConfig.getUserAgent()
+			);
+		}
 	}
 
 	private boolean hasNewYoutubeSource() {
@@ -173,6 +183,12 @@ public class LavaSrcPlugin implements AudioPlayerManagerConfiguration, SearchMan
 			log.info("Registering Custom music audio source manager...");
 			manager.registerSourceManager(this.customMusic);
 		}
+		
+		if (this.mcdnMusic != null) {
+			log.info("Registering MCDN audio source manager...");
+			manager.registerSourceManager(this.mcdnMusic);
+		}
+		
 		return manager;
 	}
 
@@ -207,6 +223,12 @@ public class LavaSrcPlugin implements AudioPlayerManagerConfiguration, SearchMan
 			log.info("Registering custom search manager");
 			manager.registerSearchManager(this.customMusic);
 		}
+		
+		if (this.mcdnMusic != null && this.sourcesConfig.isMcdn()) {
+			log.info("Registering MCDN search manager");
+			manager.registerSearchManager(this.mcdnMusic);
+		}
+		
 		return manager;
 	}
 

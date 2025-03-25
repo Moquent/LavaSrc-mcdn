@@ -16,6 +16,7 @@ public class SourcesConfig {
 	private boolean youtube = false;
 	private boolean vkMusic = false;
 	private boolean customSrc = false;
+	private boolean mcdn = false;
 
 	public boolean isSpotify() {
 		return this.spotify;
@@ -79,5 +80,13 @@ public class SourcesConfig {
 
 	public void setCustomSrc(boolean customSrc) {
 		this.customSrc = customSrc;
+	}
+	
+	public boolean isMcdn() {
+		return mcdn;
+	}
+
+	public void setMcdn(boolean mcdn) {
+		this.mcdn = mcdn;
 	}
 }
