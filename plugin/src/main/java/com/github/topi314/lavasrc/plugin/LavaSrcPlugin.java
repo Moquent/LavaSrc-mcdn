@@ -1,5 +1,13 @@
 package com.github.topi314.lavasrc.plugin;
 
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.github.topi314.lavalyrics.LyricsManager;
 import com.github.topi314.lavalyrics.api.LyricsManagerConfiguration;
 import com.github.topi314.lavasearch.SearchManager;
@@ -11,20 +19,28 @@ import com.github.topi314.lavasrc.deezer.DeezerAudioTrack;
 import com.github.topi314.lavasrc.flowerytts.FloweryTTSSourceManager;
 import com.github.topi314.lavasrc.mcdn.MCDNAudioManager;
 import com.github.topi314.lavasrc.mirror.DefaultMirroringAudioTrackResolver;
-import com.github.topi314.lavasrc.plugin.config.*;
+import com.github.topi314.lavasrc.plugin.config.AppleMusicConfig;
+import com.github.topi314.lavasrc.plugin.config.CustomSrcConfig;
+import com.github.topi314.lavasrc.plugin.config.DeezerConfig;
+import com.github.topi314.lavasrc.plugin.config.FloweryTTSConfig;
+import com.github.topi314.lavasrc.plugin.config.LavaSrcConfig;
+import com.github.topi314.lavasrc.plugin.config.LyricsSourcesConfig;
+import com.github.topi314.lavasrc.plugin.config.MCDNConfig;
+import com.github.topi314.lavasrc.plugin.config.SourcesConfig;
+import com.github.topi314.lavasrc.plugin.config.SpotifyConfig;
+import com.github.topi314.lavasrc.plugin.config.TidalConfig;
+import com.github.topi314.lavasrc.plugin.config.VkMusicConfig;
+import com.github.topi314.lavasrc.plugin.config.YandexMusicConfig;
+import com.github.topi314.lavasrc.plugin.config.YouTubeConfig;
 import com.github.topi314.lavasrc.protocol.Config;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
+import com.github.topi314.lavasrc.tidal.TidalSourceManager;
 import com.github.topi314.lavasrc.vkmusic.VkMusicSourceManager;
 import com.github.topi314.lavasrc.yandexmusic.YandexMusicSourceManager;
 import com.github.topi314.lavasrc.youtube.YoutubeSearchManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+
 import dev.arbjerg.lavalink.api.AudioPlayerManagerConfiguration;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Service
 @RestController
@@ -44,8 +60,9 @@ public class LavaSrcPlugin implements AudioPlayerManagerConfiguration, SearchMan
 	private VkMusicSourceManager vkMusic;
 	private CustomSrcAudioManager customMusic;
 	private MCDNAudioManager mcdnMusic;
+	private TidalSourceManager tidal;
 
-	public LavaSrcPlugin(LavaSrcConfig pluginConfig, SourcesConfig sourcesConfig, LyricsSourcesConfig lyricsSourcesConfig, SpotifyConfig spotifyConfig, AppleMusicConfig appleMusicConfig, DeezerConfig deezerConfig, YandexMusicConfig yandexMusicConfig, FloweryTTSConfig floweryTTSConfig, YouTubeConfig youTubeConfig, VkMusicConfig vkMusicConfig, CustomSrcConfig customSrcConfig, MCDNConfig mcdnConfig) {
+	public LavaSrcPlugin(LavaSrcConfig pluginConfig, SourcesConfig sourcesConfig, LyricsSourcesConfig lyricsSourcesConfig, SpotifyConfig spotifyConfig, AppleMusicConfig appleMusicConfig, DeezerConfig deezerConfig, YandexMusicConfig yandexMusicConfig, FloweryTTSConfig floweryTTSConfig, YouTubeConfig youTubeConfig, VkMusicConfig vkMusicConfig, TidalConfig tidalConfig, CustomSrcConfig customSrcConfig, MCDNConfig mcdnConfig) {
 		log.info("Loading LavaSrc plugin...");
 		this.sourcesConfig = sourcesConfig;
 		this.lyricsSourcesConfig = lyricsSourcesConfig;
@@ -124,6 +141,12 @@ public class LavaSrcPlugin implements AudioPlayerManagerConfiguration, SearchMan
 				vkMusic.setRecommendationsLoadLimit(vkMusicConfig.getRecommendationLoadLimit());
 			}
 		}
+		if (sourcesConfig.isTidal()) {
+			this.tidal = new TidalSourceManager(pluginConfig.getProviders(), tidalConfig.getCountryCode(), unused -> this.manager, tidalConfig.getToken());
+			if (tidalConfig.getSearchLimit() > 0) {
+				this.tidal.setSearchLimit(tidalConfig.getSearchLimit());
+			}
+		}
 		if (sourcesConfig.isCustomSrc()) {
 			this.customMusic = new CustomSrcAudioManager(
 				customSrcConfig.getKey(),
@@ -178,6 +201,10 @@ public class LavaSrcPlugin implements AudioPlayerManagerConfiguration, SearchMan
 		if (this.vkMusic != null) {
 			log.info("Registering Vk Music audio source manager...");
 			manager.registerSourceManager(this.vkMusic);
+		}
+		if (this.tidal != null) {
+			log.info("Registering Tidal audio source manager...");
+			manager.registerSourceManager(this.tidal);
 		}
 		if (this.customMusic != null) {
 			log.info("Registering Custom music audio source manager...");
@@ -259,7 +286,7 @@ public class LavaSrcPlugin implements AudioPlayerManagerConfiguration, SearchMan
 	}
 
 	@PatchMapping("/v4/lavasrc/config")
-	public void updateConfig(Config config) {
+	public void updateConfig(@RequestBody Config config) {
 		var spotifyConfig = config.getSpotify();
 		if (spotifyConfig != null && this.spotify != null) {
 			if (spotifyConfig.getSpDc() != null) {

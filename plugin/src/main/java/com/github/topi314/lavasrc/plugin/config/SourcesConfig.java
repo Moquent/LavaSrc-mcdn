@@ -17,6 +17,7 @@ public class SourcesConfig {
 	private boolean vkMusic = false;
 	private boolean customSrc = false;
 	private boolean mcdn = false;
+	private boolean tidal = false;
 
 	public boolean isSpotify() {
 		return this.spotify;
@@ -72,6 +73,14 @@ public class SourcesConfig {
 
 	public void setVkMusic(boolean vkMusic) {
 		this.vkMusic = vkMusic;
+	}
+
+	public boolean isTidal() {
+		return this.tidal;
+	}
+
+	public void setTidal(boolean tidal) {
+		this.tidal = tidal;
 	}
 
 	public boolean isCustomSrc() {

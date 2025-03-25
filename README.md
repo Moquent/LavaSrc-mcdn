@@ -16,9 +16,10 @@ A collection of additional [Lavaplayer v2](https://github.com/sedmelluq/lavaplay
 * [Flowery TTS](https://flowery.pw/docs) (Thx to [bachtran02](https://github.com/bachtran02) for implementing it)
 * [YouTube](https://youtube.com) & [YouTubeMusic](https://music.youtube.com/) [LavaSearch](https://github.com/topi314/LavaSearch)/[LavaLyrics](https://github.com/topi314/LavaLyrics)  (Thx to [DRSchlaubi](https://github.com/DRSchlaubi) for helping me)
 * [Vk Music](https://music.vk.com/) playlists/albums/songs/artists(top tracks)/search results/[LavaLyrics](https://github.com/topi314/LavaLyrics)/[LavaSearch](https://github.com/topi314/LavaSearch) (Thx to [Krispeckt](https://github.com/Krispeckt) for implementing it)
+* [Tidal](https://tidal.com) playlists/albums/songs/search results (Thx to [Nansess](https://github.com/Nansess) and [InfNibor](https://github.com/infnibor) for implementing it)
 
 > [!IMPORTANT]
-> Tracks from Spotify & Apple Music don't actually play from their sources, but are instead resolved via the configured providers
+> Tracks from Spotify & Apple Music & Tidal don't actually play from their sources, but are instead resolved via the configured providers
 
 ## Summary
 
@@ -66,6 +67,8 @@ To get your Yandex Music access token go [here](#yandex-music)
 
 To get your Vk Music user token go [here](#vk-music)
 
+To get your Tidal token go [here](#tidal)
+
 > [!WARNING]
 > YES `plugins` IS AT ROOT IN THE YAML
 
@@ -87,6 +90,10 @@ plugins:
       flowerytts: false # Enable Flowery TTS source
       youtube: false # Enable YouTube search source (https://github.com/topi314/LavaSearch)
       vkmusic: false # Enable Vk Music source
+<<<<<<< HEAD
+=======
+      tidal: false # Enable Tidal source
+>>>>>>> mcdn/master
       customsrc: true # For the custom src
     lyrics-sources:
       spotify: false # Enable Spotify lyrics source
@@ -117,7 +124,7 @@ plugins:
       albumLoadLimit: 6 # The number of pages at 300 tracks each
     deezer:
       masterDecryptionKey: "your master decryption key" # the master key used for decrypting the deezer tracks. (yes this is not here you need to get it from somewhere else)
-      # arl: "your deezer arl" # the arl cookie used for accessing the deezer api this is optional but required for formats above MP3_128
+      arl: "your deezer arl" # the arl cookie used for accessing the deezer api this does not appear to be optional anymore
       formats: [ "FLAC", "MP3_320", "MP3_256", "MP3_128", "MP3_64", "AAC_64" ] # the formats you want to use for the deezer tracks. "FLAC", "MP3_320", "MP3_256" & "AAC_64" are only available for premium users and require a valid arl
     yandexmusic:
       accessToken: "your access token" # the token used for accessing the yandex music api. See https://github.com/TopiSenpai/LavaSrc#yandex-music
@@ -137,6 +144,13 @@ plugins:
       playlistLoadLimit: 1 # The number of pages at 50 tracks each
       artistLoadLimit: 1 # The number of pages at 10 tracks each
       recommendationsLoadLimit: 10 # Number of tracks
+<<<<<<< HEAD
+=======
+    tidal:
+      countryCode: "US" # the country code for accessing region-specific content on Tidal (ISO 3166-1 alpha-2).
+      searchLimit: 6 # How many search results should be returned
+      token: "your tidal token" # the token used for accessing the tidal api. See https://github.com/topi314/LavaSrc#tidal
+>>>>>>> mcdn/master
     customsrc:
       key: "YOUR KEY HEAR"
       baseUrl: "https://yourcustomthing.com" # The base url of your custom provider. /search path if it needs that for isrc/text searches. 
@@ -162,21 +176,21 @@ LavaSrc adds the following fields to tracks & playlists in Lavalink
 
 ```json
 {
-    "encoded": "...",
-    "info": {
-        ...
-    },
-    "pluginInfo": {
-        "albumName": "...",
-        "albumArtUrl": "...",
-        "artistUrl": "...",
-        "artistArtworkUrl": "...",
-        "previewUrl": "...",
-        "isPreview": false
-    },
-    "userData": {
-        ...
-    }
+  "encoded": "...",
+  "info": {
+    ...
+  },
+  "pluginInfo": {
+    "albumName": "...",
+    "albumArtUrl": "...",
+    "artistUrl": "...",
+    "artistArtworkUrl": "...",
+    "previewUrl": "...",
+    "isPreview": false
+  },
+  "userData": {
+    ...
+  }
 }
 ```
 
@@ -197,19 +211,19 @@ LavaSrc adds the following fields to tracks & playlists in Lavalink
 
 ```json
 {
-    "info": {
-        ...
-    },
-    "pluginInfo": {
-        "type": "playlist",
-        "url": "...",
-        "artworkUrl": "...",
-        "author": "...",
-        "totalTracks": 10
-    },
-    "tracks": [
-        ...
-    ]
+  "info": {
+    ...
+  },
+  "pluginInfo": {
+    "type": "playlist",
+    "url": "...",
+    "artworkUrl": "...",
+    "author": "...",
+    "totalTracks": 10
+  },
+  "tracks": [
+    ...
+  ]
 }
 ```
 
@@ -297,38 +311,37 @@ PATCH /v4/lavasrc/config
 
 ```json
 {
-    "spotify": {
-        "clientId": "your client id",
-        "clientSecret": "your client secret",
-        "spDc": "your sp dc cookie"
-    },
-    "applemusic": {
-        "mediaAPIToken": "your apple music api token"
-    },
-    "deezer": {
-        "arl": "your deezer arl",
-        "formats": [
-            "FLAC",
-            "MP3_320",
-            "MP3_256",
-            "MP3_128",
-            "MP3_64",
-            "AAC_64"
-        ]
-    },
-    "yandexMusic": {
-        "accessToken": "your access token"
-    },
-    "vkMusic": {
-        "userToken": "your user token"
-    }
+  "spotify": {
+    "clientId": "your client id",
+    "clientSecret": "your client secret",
+    "spDc": "your sp dc cookie"
+  },
+  "applemusic": {
+    "mediaAPIToken": "your apple music api token"
+  },
+  "deezer": {
+    "arl": "your deezer arl",
+    "formats": [
+      "FLAC",
+      "MP3_320",
+      "MP3_256",
+      "MP3_128",
+      "MP3_64",
+      "AAC_64"
+    ]
+  },
+  "yandexMusic": {
+    "accessToken": "your access token"
+  },
+  "vkMusic": {
+    "userToken": "your user token"
+  }
 }
 ```
 
 </details>
 
 ---
-
 
 ## Lavaplayer Usage
 
@@ -377,9 +390,9 @@ dependencies {
     <version>x.y.z</version>
   </dependency>
   <dependency>
-      <groupId>com.github.topi314.lavasrc</groupId>
-      <artifactId>lavasrc-protocol-jvm</artifactId>
-      <version>x.y.z</version>
+    <groupId>com.github.topi314.lavasrc</groupId>
+    <artifactId>lavasrc-protocol-jvm</artifactId>
+    <version>x.y.z</version>
   </dependency>
 </dependencies>
 ```
@@ -461,7 +474,7 @@ follow [this guide](https://developer.apple.com/help/account/configure-app-capab
 AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
 
 // create a new AppleMusicSourceManager with the standard providers, apple music api token, countrycode and AudioPlayerManager and register it
-var appleMusic = new AppleMusicSourceManager(null, mediaAPIToken , "us", playerManager);
+var appleMusic = new AppleMusicSourceManager(null, mediaAPIToken, "us", playerManager);
 playerManager.registerSourceManager(appleMusic);
 ```
 
@@ -477,6 +490,7 @@ var searchManager = new SearchManager();
 // register source
 searchManager.registerSearchManager(appleMusic);
 ```
+
 </details>
 
 ---
@@ -546,7 +560,7 @@ searchManager.registerSearchManager(deezer);
 1. (Optional) Open DevTools in your browser and on the Network tab enable trotlining.
 2. Go to https://oauth.yandex.ru/authorize?response_type=token&client_id=23cabbbdc6cd418abb4b39c32c41195d
 3. Authorize and grant access
-4. The browser will redirect to the address like `https://music.yandex.ru/#access_token=AQAAAAAYc***&token_type=bearer&expires_in=31535645`.
+4. The browser will redirect to the address like `https://music.yandex.ru/#access_token=AQAAAAAYc***&token_type=bearer&expires_in=31535645`. 
    Very quickly there will be a redirect to another page, so you need to have time to copy the link. ![image](https://user-images.githubusercontent.com/68972811/196124196-a817b828-3387-4f70-a2b2-cdfdc71ce1f2.png)
 5. Your accessToken, what is after `access_token`.
 
@@ -682,6 +696,24 @@ searchManager.registerSearchManager(vkmusic);
 
 ---
 
+### Tidal
+
+<details>
+<summary>How to get tidal token</summary>
+
+Use Google to get the tidal token.
+
+</details>
+
+```java
+AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
+
+// create a new TidalSourceManager with the token and register it
+var tidal = new TidalSourceManager(countryCode, () -> playerManager, new DefaultMirroringAudioTrackResolver(providers), "your tidal token");
+
+playerManager.registerSourceManager(tidal);
+```
+
 ## Supported URLs and Queries
 
 ### Spotify
@@ -748,6 +780,15 @@ You can read about all the available options [here](https://flowery.pw/docs), a 
 * https://vk.com/music/album/-2000228258_15228258
 * https://vk.com/audios700949584?q=phonk%20album&z=audio_playlist-2000933493_13933493%2Fbe3494d46d310b0d0d
 * https://vk.ru/audios700949584?q=phonk%20album&z=audio_playlist-2000933493_13933493
+
+### Tidal
+
+* `tdsearch:animals architects`
+* `tdrec:12345678` (`tdrec:{TRACK_ID}`)
+* https://tidal.com/browse/track/12345678
+* https://tidal.com/browse/album/12345678
+* https://tidal.com/browse/playlist/12345678
+* https://tidal.com/browse/artist/12345678
 
 ---
 
