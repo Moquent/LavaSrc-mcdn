@@ -17,6 +17,7 @@ public class SourcesConfig {
 	private boolean vkMusic = false;
 	private boolean tidal = false;
 	private boolean customSrc = false;
+	private boolean lofiRadio = false;
 
 	public boolean isSpotify() {
 		return this.spotify;
@@ -88,5 +89,13 @@ public class SourcesConfig {
 
 	public void setCustomSrc(boolean customSrc) {
 		this.customSrc = customSrc;
+	}
+
+	public boolean isLofiRadio() {
+		return lofiRadio;
+	}
+
+	public void setLofiRadio(boolean lofiRadio) {
+		this.lofiRadio = lofiRadio;
 	}
 }
