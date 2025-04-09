@@ -21,16 +21,20 @@ import java.util.function.Function;
 
 public class LofiRadioSrcAudioManager implements HttpConfigurable, AudioSourceManager {
 	public static final String PREFIX = "lofiradio:";
-	private String baseUrl;
+	private String audioUrl, allUrl, stationUrl;
 	private String name;
 
 	private HttpInterfaceManager httpInterfaceManager;
 	private static final Logger log = LoggerFactory.getLogger(LofiRadioSrcAudioManager.class);
+	private LofiRadioService service;
 
-	public LofiRadioSrcAudioManager(String baseUrl, @Nullable String name) {
+	public LofiRadioSrcAudioManager(String audioUrl, String allUrl, String stationUrl, @Nullable String name) {
 		this.name = name;
-		this.baseUrl = baseUrl;
+		this.audioUrl = audioUrl;
+		this.allUrl = allUrl;
+		this.stationUrl = stationUrl;
 		this.httpInterfaceManager = HttpClientTools.createCookielessThreadLocalManager();
+		service = new LofiRadioService(allUrl, stationUrl, this);
 	}
 
 	@Override
@@ -56,7 +60,7 @@ public class LofiRadioSrcAudioManager implements HttpConfigurable, AudioSourceMa
 	public AudioItem loadItem(String identifier) {
 		try {
 			if (identifier.startsWith(PREFIX)) {
-				return this.getTrackById(identifier.substring(PREFIX.length()));
+				return this.getTrackByStationId(identifier.substring(PREFIX.length()));
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -64,20 +68,22 @@ public class LofiRadioSrcAudioManager implements HttpConfigurable, AudioSourceMa
 		return null;
 	}
 
-	private AudioItem getTrackById(String id) throws IOException {
-		return this.parseTrack(id);
+	private AudioItem getTrackByStationId(String id) throws IOException {
+		LofiRadioStation toPlay = service.getStation(id);
+
+		return this.parseTrack(toPlay.getNowPlaying());
 	}
 
-	private AudioTrack parseTrack(String id) {
+	private AudioTrack parseTrack(LofiTrackInfo trackInfo) {
 		var track = new AudioTrackInfo(
-			"Lofi Radio",
-			"N/A",
-			10000,
-			id,
+			trackInfo.getTitle(),
+			trackInfo.getArtists(),
+			(long) (trackInfo.getDuration() * 1000),
+			trackInfo.getSlug(),
 			false,
-			baseUrl + id,
-			null,
-			null
+			audioUrl + trackInfo.getSlug() + ".mp3",
+			trackInfo.getImage(),
+			trackInfo.getISrc()
 		);
 		return new LofiRadioSrcAudioTrack(track, this);
 	}

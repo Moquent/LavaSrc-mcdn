@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 public class LofiRadioConfig {
 	private String baseUrl;
 	private String name;
+	private String allUrl;
+	private String stationUrl;
 
 	public String getBaseUrl() {
 		return this.baseUrl;
@@ -23,5 +25,21 @@ public class LofiRadioConfig {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getAllUrl() {
+		return allUrl;
+	}
+
+	public void setAllUrl(String allUrl) {
+		this.allUrl = allUrl;
+	}
+
+	public String getStationUrl() {
+		return stationUrl;
+	}
+
+	public void setStationUrl(String stationUrl) {
+		this.stationUrl = stationUrl;
 	}
 }
