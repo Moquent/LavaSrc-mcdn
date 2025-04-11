@@ -10,6 +10,8 @@ public class LofiRadioConfig {
 	private String name;
 	private String allUrl;
 	private String stationUrl;
+	private String user;
+	private String pass;
 
 	public String getBaseUrl() {
 		return this.baseUrl;
@@ -41,5 +43,21 @@ public class LofiRadioConfig {
 
 	public void setStationUrl(String stationUrl) {
 		this.stationUrl = stationUrl;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getPass() {
+		return pass;
+	}
+
+	public void setPass(String pass) {
+		this.pass = pass;
 	}
 }

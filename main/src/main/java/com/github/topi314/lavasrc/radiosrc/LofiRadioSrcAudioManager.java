@@ -28,12 +28,13 @@ public class LofiRadioSrcAudioManager implements HttpConfigurable, AudioSourceMa
 	private static final Logger log = LoggerFactory.getLogger(LofiRadioSrcAudioManager.class);
 	private LofiRadioService service;
 
-	public LofiRadioSrcAudioManager(String audioUrl, String allUrl, String stationUrl, @Nullable String name) {
+	public LofiRadioSrcAudioManager(String audioUrl, String allUrl, String stationUrl, @Nullable String name, String user, String pass) {
 		this.name = name;
 		this.audioUrl = audioUrl;
 		this.allUrl = allUrl;
 		this.stationUrl = stationUrl;
 		this.httpInterfaceManager = HttpClientTools.createCookielessThreadLocalManager();
+		this.httpInterfaceManager.setHttpContextFilter(new LofiHttpContextFilter(audioUrl, user, pass));
 		service = new LofiRadioService(allUrl, stationUrl, this);
 	}
 
