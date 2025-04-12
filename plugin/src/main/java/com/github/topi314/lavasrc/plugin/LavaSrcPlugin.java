@@ -12,6 +12,7 @@ import com.github.topi314.lavasrc.flowerytts.FloweryTTSSourceManager;
 import com.github.topi314.lavasrc.mirror.DefaultMirroringAudioTrackResolver;
 import com.github.topi314.lavasrc.plugin.config.*;
 import com.github.topi314.lavasrc.protocol.Config;
+import com.github.topi314.lavasrc.radiosrc.LofiRadioSrcAudioManager;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
 import com.github.topi314.lavasrc.tidal.TidalSourceManager;
 import com.github.topi314.lavasrc.vkmusic.VkMusicSourceManager;
@@ -45,8 +46,9 @@ public class LavaSrcPlugin implements AudioPlayerManagerConfiguration, SearchMan
 	private VkMusicSourceManager vkMusic;
 	private TidalSourceManager tidal;
 	private CustomSrcAudioManager customMusic;
+	private LofiRadioSrcAudioManager lofiRadio;
 
-	public LavaSrcPlugin(LavaSrcConfig pluginConfig, SourcesConfig sourcesConfig, LyricsSourcesConfig lyricsSourcesConfig, SpotifyConfig spotifyConfig, AppleMusicConfig appleMusicConfig, DeezerConfig deezerConfig, YandexMusicConfig yandexMusicConfig, FloweryTTSConfig floweryTTSConfig, YouTubeConfig youTubeConfig, VkMusicConfig vkMusicConfig, TidalConfig tidalConfig, CustomSrcConfig customSrcConfig) {
+	public LavaSrcPlugin(LavaSrcConfig pluginConfig, SourcesConfig sourcesConfig, LyricsSourcesConfig lyricsSourcesConfig, SpotifyConfig spotifyConfig, AppleMusicConfig appleMusicConfig, DeezerConfig deezerConfig, YandexMusicConfig yandexMusicConfig, FloweryTTSConfig floweryTTSConfig, YouTubeConfig youTubeConfig, VkMusicConfig vkMusicConfig, TidalConfig tidalConfig, CustomSrcConfig customSrcConfig, LofiRadioConfig lofiRadioConfig) {
 		log.info("Loading LavaSrc plugin...");
 		this.sourcesConfig = sourcesConfig;
 		this.lyricsSourcesConfig = lyricsSourcesConfig;
@@ -139,6 +141,16 @@ public class LavaSrcPlugin implements AudioPlayerManagerConfiguration, SearchMan
 				customSrcConfig.getUserAgent()
 			);
 		}
+		if (sourcesConfig.isLofiRadio()) {
+			this.lofiRadio = new LofiRadioSrcAudioManager(
+				lofiRadioConfig.getBaseUrl(),
+				lofiRadioConfig.getAllUrl(),
+				lofiRadioConfig.getStationUrl(),
+				lofiRadioConfig.getName(),
+				lofiRadioConfig.getUser(),
+				lofiRadioConfig.getPass()
+			);
+		}
 	}
 
 	private boolean hasNewYoutubeSource() {
@@ -185,6 +197,10 @@ public class LavaSrcPlugin implements AudioPlayerManagerConfiguration, SearchMan
 		if (this.customMusic != null) {
 			log.info("Registering Custom music audio source manager...");
 			manager.registerSourceManager(this.customMusic);
+		}
+		if (this.lofiRadio != null) {
+			log.info("Registering lofi radio audio source manager...");
+			manager.registerSourceManager(this.lofiRadio);
 		}
 		return manager;
 	}
