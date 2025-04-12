@@ -19,6 +19,7 @@ public class SourcesConfig {
 	private boolean customSrc = false;
 	private boolean lofiRadio = false;
 
+
 	public boolean isSpotify() {
 		return this.spotify;
 	}
@@ -98,4 +99,5 @@ public class SourcesConfig {
 	public void setLofiRadio(boolean lofiRadio) {
 		this.lofiRadio = lofiRadio;
 	}
+
 }

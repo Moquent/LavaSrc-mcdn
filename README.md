@@ -64,6 +64,7 @@ A collection of additional [Lavaplayer v2](https://github.com/sedmelluq/lavaplay
 > For example, LavaSrc cannot directly play from Spotify, or any source marked as `Mirror` playback, so it must use a LavaSrc platform marked as `Direct`, like Deezer.
 > You may also use any source manager registered to your `AudioPlayerManager`.
 
+
 ## Lavalink Usage
 
 This plugin requires Lavalink `v4` or greater
