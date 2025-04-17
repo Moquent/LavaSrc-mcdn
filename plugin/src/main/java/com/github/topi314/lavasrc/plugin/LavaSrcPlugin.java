@@ -164,7 +164,8 @@ public class LavaSrcPlugin implements AudioPlayerManagerConfiguration, SearchMan
 				mcdnConfig.getApiKey(),
 				mcdnConfig.getBaseUrl(),
 				mcdnConfig.getUserAgent()
-      );
+      		);
+		}
 		if (sourcesConfig.isLofiRadio()) {
 			this.lofiRadio = new LofiRadioSrcAudioManager(
 				lofiRadioConfig.getBaseUrl(),
