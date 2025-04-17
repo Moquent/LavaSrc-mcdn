@@ -32,6 +32,7 @@ import com.github.topi314.lavasrc.plugin.config.TidalConfig;
 import com.github.topi314.lavasrc.plugin.config.VkMusicConfig;
 import com.github.topi314.lavasrc.plugin.config.YandexMusicConfig;
 import com.github.topi314.lavasrc.plugin.config.YouTubeConfig;
+import com.github.topi314.lavasrc.plugin.config.LofiRadioConfig;
 import com.github.topi314.lavasrc.protocol.Config;
 import com.github.topi314.lavasrc.radiosrc.LofiRadioSrcAudioManager;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
